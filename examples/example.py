@@ -20,7 +20,7 @@ import asyncio
 async def main():
 
     async with aiohttp.ClientSession() as session:
-        api = WallConnector(ip, session)
+        api = WallConnector(ip, 0.0001, session)
         print("---- Vitals ----")
         vitals = await api.async_get_vitals()
 

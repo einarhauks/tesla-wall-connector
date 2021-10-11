@@ -1,8 +1,9 @@
 import typing
 from .api import API
 
+
 class Vitals:
-    def __init__(self, raw_data : dict, api : API):
+    def __init__(self, raw_data: dict, api: API):
         self.raw_data = raw_data
         self.api = api
 
@@ -61,7 +62,7 @@ class Vitals:
     @property
     def relay_coil_v(self) -> float:
         return self.raw_data["relay_coil_v"]
-        
+
     @property
     def pcba_temp_c(self) -> float:
         return self.raw_data["pcba_temp_c"]
@@ -100,7 +101,7 @@ class Vitals:
 
     @property
     def config_status(self) -> int:
-        return self.raw_data["config_status"]  
+        return self.raw_data["config_status"]
 
     @property
     def evse_state(self) -> int:

@@ -1,7 +1,8 @@
 from .api import API
 
+
 class Lifetime:
-    def __init__(self, raw_data : dict, api : API):
+    def __init__(self, raw_data: dict, api: API):
         self.raw_data = raw_data
         self.api = api
 
@@ -48,4 +49,3 @@ class Lifetime:
     async def async_update(self):
         """Update the vitals data."""
         self.raw_data = await self.api.async_request("lifetime")
-
