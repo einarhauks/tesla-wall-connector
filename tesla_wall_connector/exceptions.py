@@ -1,3 +1,6 @@
+""" Tesla Wall Connector Exceptions """
+
+
 class WallConnectorError(Exception):
     """Generic WallConnector exception."""
 

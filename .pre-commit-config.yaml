@@ -1,0 +1,63 @@
+repos:
+- repo: https://github.com/pre-commit/pre-commit-hooks
+  rev: v2.4.0
+  hooks:
+  - id: check-added-large-files
+  - id: check-docstring-first
+  - id: debug-statements
+  - id: end-of-file-fixer
+  - id: trailing-whitespace
+  - id: check-ast
+  - id: check-builtin-literals
+  - id: detect-private-key
+  - id: mixed-line-ending
+-   repo: local
+    hooks:
+      - id: bandit
+        name: 🎰 Checking using bandit
+        language: system
+        types: [python]
+        entry: poetry run bandit
+        files: ^tesla_wall_connector/
+        require_serial: true
+      - id: black
+        name: ☕️ Format using black
+        language: system
+        types: [python]
+        entry: poetry run black
+        require_serial: true
+      - id: codespell
+        name: ✅ Check code for common misspellings
+        language: system
+        types: [text]
+        exclude: ^poetry\.lock$
+        entry: poetry run codespell
+      - id: flake8
+        name: 👔 Enforcing style guide with flake8
+        language: system
+        types: [python]
+        entry: poetry run flake8
+        require_serial: true
+      - id: poetry
+        name: 📜 Check pyproject with Poetry
+        language: system
+        entry: poetry check
+        pass_filenames: false
+        always_run: true
+      - id: pylint
+        name: 🌟 Starring code with pylint
+        language: system
+        types: [python]
+        entry: poetry run pylint
+      - id: pytest
+        name: 🧪 Running tests and test coverage with pytest
+        language: system
+        types: [python]
+        entry: poetry run pytest
+        pass_filenames: false
+      - id: pyupgrade
+        name: 🆙 Checking for upgradable syntax with pyupgrade
+        language: system
+        types: [python]
+        entry: poetry run pyupgrade
+        args: [--py36-plus]

@@ -14,6 +14,12 @@ backoff = "^1.11.1"
 aresponses = "^2.1.4"
 pytest-asyncio = "^0.15.1"
 black = "^21.9b0"
+pre-commit = "^2.15.0"
+bandit = "^1.7.0"
+codespell = "^2.1.0"
+flake8 = "^4.0.1"
+pyupgrade = "^2.29.0"
+pylint = "^2.11.1"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
