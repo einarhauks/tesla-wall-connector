@@ -1,8 +1,12 @@
 [tool.poetry]
 name = "tesla-wall-connector"
 version = "0.1.0"
+license = "MIT"
 description = "API Library for communicating with a Tesla Wall Connector"
-authors = ["Einar Bragi Hauksson"]
+authors = ["Einar Bragi Hauksson <einar.hauksson@gmail.com>"]
+readme = "README.md"
+repository = "https://github.com/einarhauks/tesla-wall-connector"
+keywords = ["tesla", "wall connector"]
 
 [tool.poetry.dependencies]
 python = "^3.8"
