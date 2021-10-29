@@ -1,13 +1,11 @@
 """ Lifetime Data class for Tesla Wall Connector """
-from .api import API
 
 
 class Lifetime:
     """Object holding lifetime data for Tesla Wall Connector"""
 
-    def __init__(self, raw_data: dict, api: API):
+    def __init__(self, raw_data: dict):
         self.raw_data = raw_data
-        self.api = api
 
     @property
     def contactor_cycles(self) -> int:
@@ -58,7 +56,3 @@ class Lifetime:
     def charging_time_s(self) -> int:
         """Total Charging time in seconds"""
         return self.raw_data["charging_time_s"]
-
-    async def async_update(self):
-        """Update the vitals data."""
-        self.raw_data = await self.api.async_request("lifetime")

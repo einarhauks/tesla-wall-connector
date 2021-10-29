@@ -4,16 +4,14 @@
 #   this object has a lot of attributes in the Tesla API, therefore we need many public methods
 """ Vitals Data class for Tesla Wall Connector """
 import typing
-from .api import API
 
 
 class Vitals:
     """Object holding 'vitals' data for a Tesla Wall Connector"""
 
-    def __init__(self, raw_data: dict, api: API):
+    def __init__(self, raw_data: dict):
         """Return a new Vitals object from Tesla Wall Connector API response"""
         self.raw_data = raw_data
-        self.api = api
 
     @property
     def contactor_closed(self) -> bool:
@@ -144,7 +142,3 @@ class Vitals:
     def current_alerts(self) -> typing.List[str]:
         """Current alerts"""
         return self.raw_data["current_alerts"]
-
-    async def async_update(self):
-        """Update the vitals data."""
-        self.raw_data = await self.api.async_request("vitals")

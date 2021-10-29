@@ -18,15 +18,15 @@ class WallConnector:
 
     async def async_get_vitals(self) -> dict:
         """Get 'vitals' data"""
-        return Vitals(await self.api.async_request("vitals"), self.api)
+        return Vitals(await self.api.async_request("vitals"))
 
     async def async_get_lifetime(self) -> dict:
         """Get 'lifetime' data"""
-        return Lifetime(await self.api.async_request("lifetime"), self.api)
+        return Lifetime(await self.api.async_request("lifetime"))
 
     async def async_get_version(self) -> dict:
         """Get version information"""
-        return Version(await self.api.async_request("version"), self.api)
+        return Version(await self.api.async_request("version"))
 
     async def __aenter__(self):
         return self
