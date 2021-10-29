@@ -2,6 +2,8 @@
 
 import asyncio
 import socket
+from json.decoder import JSONDecodeError
+import json
 import async_timeout
 import aiohttp
 import backoff
@@ -45,7 +47,15 @@ class API:
             async with async_timeout.timeout(self.timeout):
                 async with self.session.get(self.get_url(endpoint)) as response:
                     response.raise_for_status()
-                    return await response.json()
+                    try:
+                        return await response.json()
+                    except JSONDecodeError:
+                        # Workaround: Wall Connector seems to sometimes return invalid
+                        # JSON that is just missing the last } character
+                        # Append that character and retry decoding
+                        raw_content = await response.text()
+                        raw_content += "}"
+                        return json.loads(raw_content)
         except asyncio.TimeoutError as ex:
             raise WallConnectorConnectionTimeoutError(
                 f"Timeout while connecting to Wall Connector at {self.host}"
@@ -53,4 +63,8 @@ class API:
         except (aiohttp.ClientError, socket.gaierror) as ex:
             raise WallConnectorConnectionError(
                 f"Error while communicating with Wall Connector at {self.host}: {ex}"
+            ) from ex
+        except JSONDecodeError as ex:
+            raise WallConnectorConnectionError(
+                f"Error decoding response from wall connector at {self.host}: {ex}"
             ) from ex
