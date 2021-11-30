@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tesla-wall-connector"
-version = "0.2.0"
+version = "1.0.0"
 license = "MIT"
 description = "API Library for communicating with a Tesla Wall Connector"
 authors = ["Einar Bragi Hauksson <einar.hauksson@gmail.com>"]
@@ -11,10 +11,10 @@ keywords = ["tesla", "wall connector"]
 [tool.poetry.dependencies]
 python = "^3.8"
 aiohttp = "^3.7.4"
-pytest = "^6.2.5"
 backoff = "^1.11.1"
 
 [tool.poetry.dev-dependencies]
+pytest = "^6.2.5"
 aresponses = "^2.1.4"
 pytest-asyncio = "^0.15.1"
 black = "^21.9b0"
