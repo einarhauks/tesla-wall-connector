@@ -1,6 +1,6 @@
 # Python Tesla Wall Connector API <!-- omit in TOC -->
 
-Python Tesla Wall Connector API for local consumption. This package allows you to monitor your 3rd generation Tesla Wall Connector programmatically. It is mainly created to enable integration with Home Assistant and threfore expoeses an asynchronous API.
+Python Tesla Wall Connector API for local consumption. This package allows you to monitor your 3rd generation Tesla Wall Connector programmatically. It is mainly created to enable integration with Home Assistant and threfore exposes an asynchronous API.
 
 ## Usage
 
