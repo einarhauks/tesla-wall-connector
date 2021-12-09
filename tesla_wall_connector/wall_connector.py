@@ -1,10 +1,11 @@
 """ Asynchronous Python client for Tesla Wall Connector """
 
 from aiohttp import ClientSession
-from .vitals import Vitals
+
+from .api import API
 from .lifetime import Lifetime
 from .version import Version
-from .api import API
+from .vitals import Vitals
 
 
 class WallConnector:

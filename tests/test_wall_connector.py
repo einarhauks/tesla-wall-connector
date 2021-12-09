@@ -7,6 +7,7 @@ import pytest
 from tesla_wall_connector.exceptions import (
     WallConnectorConnectionError,
     WallConnectorConnectionTimeoutError,
+    WallConnectorDecodeError,
 )
 
 from tesla_wall_connector import WallConnector
@@ -197,3 +198,100 @@ def add_valid_vitals_response(aresponses):
     aresponses.add(
         "anyhost", "/api/1/vitals", "GET", get_valid_vitals_response_handler(aresponses)
     )
+
+
+@pytest.mark.asyncio
+async def test_can_handle_nan_in_json(aresponses):
+    aresponses.add(
+        "anyhost",
+        "/api/1/lifetime",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/json"},
+            text="""
+                {
+                    "contactor_cycles": 450,
+                    "contactor_cycles_loaded": nan ,
+                    "alert_count":nan,
+                    "thermal_foldbacks": 0,
+                    "avg_startup_temp": nan,
+                    "charge_starts": 450,
+                    "energy_wh": 2566837,
+                    "connector_cycles": 238,
+                    "uptime_s": 15896787,
+                    "charging_time_s": 758036
+                }
+                """,
+        ),
+    )
+
+    async with aiohttp.ClientSession() as session:
+        wall_connector = WallConnector("anyhost", session=session)
+        assert await wall_connector.async_get_lifetime()
+
+
+@pytest.mark.asyncio
+async def test_can_handle_missing_end_brace(aresponses):
+    aresponses.add(
+        "anyhost",
+        "/api/1/lifetime",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/json"},
+            text="""
+                {
+                    "contactor_cycles": 450,
+                    "contactor_cycles_loaded": 3 ,
+                    "alert_count":1,
+                    "thermal_foldbacks": 0,
+                    "avg_startup_temp": 3,
+                    "charge_starts": 450,
+                    "energy_wh": 2566837,
+                    "connector_cycles": 238,
+                    "uptime_s": 15896787,
+                    "charging_time_s": 758036
+
+                """,
+        ),
+    )
+
+    async with aiohttp.ClientSession() as session:
+        wall_connector = WallConnector("anyhost", session=session)
+        assert await wall_connector.async_get_lifetime()
+
+
+@pytest.mark.asyncio
+async def test_can_get_raw_response_from_exception(aresponses):
+    fake_response = """
+                {
+                    "contactor_cycles": 450,
+                    "contactor_cycles_loaded": 3 ,
+                    "alert_count":1,
+                    "thermal_foldbacks": 0,
+                    "avg_startup_temp: 3,
+                    "charge_starts": 450,
+                    "energy_wh": 2566837,
+                    "connector_cycles": 238,
+                    "uptime_s": 15896787,
+                    "charging_time_s": 758036
+                    }
+                """
+    aresponses.add(
+        "anyhost",
+        "/api/1/lifetime",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/json"},
+            text=fake_response,
+        ),
+    )
+
+    async with aiohttp.ClientSession() as session:
+        wall_connector = WallConnector("anyhost", session=session)
+        try:
+            await wall_connector.async_get_lifetime()
+        except WallConnectorDecodeError as ex:
+            assert ex.get_raw_body() == fake_response
