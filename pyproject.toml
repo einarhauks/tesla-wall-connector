@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tesla-wall-connector"
-version = "1.0.0"
+version = "1.0.1"
 license = "MIT"
 description = "API Library for communicating with a Tesla Wall Connector"
 authors = ["Einar Bragi Hauksson <einar.hauksson@gmail.com>"]
