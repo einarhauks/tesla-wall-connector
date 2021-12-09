@@ -24,7 +24,6 @@ class API:
         self.host = host
         self.session = session
         self.timeout = timeout
-        self.last_response = ""
         self.fix_nan_regex = re.compile(r":\s*\bnan\b", flags=re.IGNORECASE)
 
     def get_url(self, endpoint: str):
