@@ -45,6 +45,7 @@ async def test_vitals_request(aresponses):
         assert vitals.config_status == 5
         assert vitals.evse_state == 1
         assert vitals.current_alerts == ["alert1", "alert2"]
+        assert vitals.total_power_w == 241.7
 
 
 @pytest.mark.asyncio
