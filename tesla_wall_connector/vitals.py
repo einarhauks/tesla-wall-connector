@@ -139,6 +139,14 @@ class Vitals:
         return self.raw_data["evse_state"]
 
     @property
+    def total_power_w(self) -> float:
+        """Total power calculated from three phases"""
+        return round(
+            (self.voltageA_v * self.currentA_a) +
+            (self.voltageB_v * self.currentB_a) +
+            (self.voltageC_v * self.currentC_a), 1)
+
+    @property
     def current_alerts(self) -> typing.List[str]:
         """Current alerts"""
         return self.raw_data["current_alerts"]
