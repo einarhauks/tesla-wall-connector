@@ -7,7 +7,6 @@ import socket
 from json.decoder import JSONDecodeError
 
 import aiohttp
-import async_timeout
 import backoff
 
 from .exceptions import (
@@ -48,7 +47,7 @@ class API:
             Data for the given endpoint
         """
         try:
-            async with async_timeout.timeout(self.timeout):
+            async with asyncio.timeout(self.timeout):
                 async with self.session.get(self.get_url(endpoint)) as response:
                     response.raise_for_status()
                     return await self.decode_response(response)

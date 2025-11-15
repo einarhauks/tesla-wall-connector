@@ -9,7 +9,7 @@ repository = "https://github.com/einarhauks/tesla-wall-connector"
 keywords = ["tesla", "wall connector"]
 
 [tool.poetry.dependencies]
-python = "^3.8"
+python = "^3.11"
 aiohttp = "^3.9.0"
 backoff = ">=1.11.1"
 
@@ -24,7 +24,6 @@ codespell = "^2.1.0"
 flake8 = "^4.0.1"
 pyupgrade = "^2.29.0"
 pylint = "^2.11.1"
-async-timeout = ">=4.0.3"
 
 [build-system]
 requires = ["poetry-core>=1.0.0"]
