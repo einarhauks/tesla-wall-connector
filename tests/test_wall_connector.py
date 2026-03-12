@@ -117,6 +117,73 @@ async def test_version_request(aresponses):
 
 
 @pytest.mark.asyncio
+async def test_wifi_status_request(aresponses):
+    aresponses.add(
+        "anyhost",
+        "/api/1/wifi_status",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/json"},
+            text="""
+                {
+                    "wifi_ssid":"VGVzdE5ldHdvcms=",
+                    "wifi_signal_strength":44,
+                    "wifi_rssi":-68,
+                    "wifi_snr":18,
+                    "wifi_connected":true,
+                    "wifi_infra_ip":"192.168.1.50",
+                    "internet":true,
+                    "wifi_mac":"AA:BB:CC:DD:EE:FF"
+                }
+                """,
+        ),
+    )
+
+    async with aiohttp.ClientSession() as session:
+        wall_connector = WallConnector("anyhost", session=session)
+        wifi_status = await wall_connector.async_get_wifi_status()
+        assert wifi_status.wifi_ssid == "TestNetwork"
+        assert wifi_status.wifi_signal_strength == 44
+        assert wifi_status.wifi_rssi == -68
+        assert wifi_status.wifi_snr == 18
+        assert wifi_status.wifi_connected is True
+        assert wifi_status.wifi_infra_ip == "192.168.1.50"
+        assert wifi_status.internet is True
+        assert wifi_status.wifi_mac == "AA:BB:CC:DD:EE:FF"
+
+
+@pytest.mark.asyncio
+async def test_wifi_status_request_non_base64_ssid(aresponses):
+    aresponses.add(
+        "anyhost",
+        "/api/1/wifi_status",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/json"},
+            text="""
+                {
+                    "wifi_ssid":"MyPlainNetwork",
+                    "wifi_signal_strength":44,
+                    "wifi_rssi":-68,
+                    "wifi_snr":18,
+                    "wifi_connected":true,
+                    "wifi_infra_ip":"192.168.1.50",
+                    "internet":true,
+                    "wifi_mac":"AA:BB:CC:DD:EE:FF"
+                }
+                """,
+        ),
+    )
+
+    async with aiohttp.ClientSession() as session:
+        wall_connector = WallConnector("anyhost", session=session)
+        wifi_status = await wall_connector.async_get_wifi_status()
+        assert wifi_status.wifi_ssid == "MyPlainNetwork"
+
+
+@pytest.mark.asyncio
 async def test_internal_session(aresponses):
     add_valid_vitals_response(aresponses)
     async with WallConnector("anyhost") as wall_connector:
