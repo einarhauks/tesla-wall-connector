@@ -9,9 +9,10 @@ import typing
 class Vitals:
     """Object holding 'vitals' data for a Tesla Wall Connector"""
 
-    def __init__(self, raw_data: dict):
+    def __init__(self, raw_data: dict, split_phase: bool = False):
         """Return a new Vitals object from Tesla Wall Connector API response"""
         self.raw_data = raw_data
+        self.split_phase = split_phase
 
     @property
     def contactor_closed(self) -> bool:
@@ -155,14 +156,6 @@ class Vitals:
         return self.raw_data["evse_state"]
 
     @property
-    def total_power_w(self) -> float:
-        """Total power calculated from three phases"""
-        return round(
-            (self.voltageA_v * self.currentA_a) +
-            (self.voltageB_v * self.currentB_a) +
-            (self.voltageC_v * self.currentC_a), 1)
-
-    @property
     def current_alerts(self) -> typing.List[str]:
         """Current alerts"""
         return self.raw_data["current_alerts"]
@@ -171,3 +164,16 @@ class Vitals:
     def evse_not_ready_reasons(self) -> typing.List[int]:
         """Reasons for EVSE not being ready."""
         return self.raw_data.get("evse_not_ready_reasons", [])
+
+    @property
+    def total_power_w(self) -> float:
+        """Total power calculated from either split-phase or three-phase input"""
+        if self.split_phase:
+            return round(self.grid_v * self.vehicle_current_a, 1)
+
+        total_power = (
+            (self.voltageA_v * self.currentA_a) +
+            (self.voltageB_v * self.currentB_a) +
+            (self.voltageC_v * self.currentC_a)
+        )
+        return round(total_power, 1)

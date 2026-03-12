@@ -77,6 +77,14 @@ async def test_vitals_request_modern_relay_fields(aresponses):
         assert vitals.relay_coil_v == 12.0
         assert vitals.evse_not_ready_reasons == [4, 8]
 
+@pytest.mark.asyncio
+async def test_vitals_request_split_phase(aresponses):
+    add_valid_vitals_response(aresponses)
+    async with aiohttp.ClientSession() as session:
+        wall_connector = WallConnector("anyhost", session=session, split_phase=True)
+        vitals = await wall_connector.async_get_vitals()
+        assert vitals.total_power_w == 114.4
+
 
 @pytest.mark.asyncio
 async def test_lifetime_request(aresponses):
