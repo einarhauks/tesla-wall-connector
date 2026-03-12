@@ -80,8 +80,24 @@ class Vitals:
 
     @property
     def relay_coil_v(self) -> float:
-        """Relay coil voltage"""
-        return self.raw_data["relay_coil_v"]
+        """Relay coil voltage (alias).
+
+        Newer firmware exposes two relays as relay_k1_v and relay_k2_v.
+        Older firmware exposes relay_coil_v only.
+        """
+        if "relay_coil_v" in self.raw_data:
+            return self.raw_data["relay_coil_v"]
+        return self.relay_k1_v
+
+    @property
+    def relay_k1_v(self) -> float:
+        """Relay K1 voltage"""
+        return self.raw_data["relay_k1_v"]
+
+    @property
+    def relay_k2_v(self) -> float:
+        """Relay K2 voltage"""
+        return self.raw_data["relay_k2_v"]
 
     @property
     def pcba_temp_c(self) -> float:
@@ -150,3 +166,8 @@ class Vitals:
     def current_alerts(self) -> typing.List[str]:
         """Current alerts"""
         return self.raw_data["current_alerts"]
+
+    @property
+    def evse_not_ready_reasons(self) -> typing.List[int]:
+        """Reasons for EVSE not being ready."""
+        return self.raw_data.get("evse_not_ready_reasons", [])

@@ -45,7 +45,37 @@ async def test_vitals_request(aresponses):
         assert vitals.config_status == 5
         assert vitals.evse_state == 1
         assert vitals.current_alerts == ["alert1", "alert2"]
+        assert vitals.evse_not_ready_reasons == []
         assert vitals.total_power_w == 241.7
+
+
+@pytest.mark.asyncio
+async def test_vitals_request_modern_relay_fields(aresponses):
+    aresponses.add(
+        "anyhost",
+        "/api/1/vitals",
+        "GET",
+        aresponses.Response(
+            status=200,
+            headers={"Content-Type": "application/json"},
+            text="""
+                {
+                    "relay_k1_v":12.0,
+                    "relay_k2_v":0.0,
+                    "evse_not_ready_reasons":[4,8]
+                }
+                """,
+        ),
+    )
+
+    async with aiohttp.ClientSession() as session:
+        wall_connector = WallConnector("anyhost", session=session)
+        vitals = await wall_connector.async_get_vitals()
+        assert vitals.relay_k1_v == 12.0
+        assert vitals.relay_k2_v == 0.0
+        # Backward-compatible alias maps to relay_k1_v when relay_coil_v is absent.
+        assert vitals.relay_coil_v == 12.0
+        assert vitals.evse_not_ready_reasons == [4, 8]
 
 
 @pytest.mark.asyncio
@@ -101,8 +131,10 @@ async def test_version_request(aresponses):
             text="""
                 {
                     "firmware_version":"21.29.1+g4152353e50f744",
+                    "git_branch":"HEAD",
                     "part_number":"1529455-02-D",
-                    "serial_number":"ACB12345678901"
+                    "serial_number":"ACB12345678901",
+                    "web_service":"h3-hermes-prd.sn.tesla.services"
                 }
                 """,
         ),
@@ -112,8 +144,10 @@ async def test_version_request(aresponses):
         wall_connector = WallConnector("anyhost", session=session)
         version = await wall_connector.async_get_version()
         assert version.firmware_version == "21.29.1+g4152353e50f744"
+        assert version.git_branch == "HEAD"
         assert version.part_number == "1529455-02-D"
         assert version.serial_number == "ACB12345678901"
+        assert version.web_service == "h3-hermes-prd.sn.tesla.services"
 
 
 @pytest.mark.asyncio
