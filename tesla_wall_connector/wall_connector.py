@@ -6,6 +6,7 @@ from .api import API
 from .lifetime import Lifetime
 from .version import Version
 from .vitals import Vitals
+from .wifi_status import WifiStatus
 
 
 class WallConnector:
@@ -28,6 +29,10 @@ class WallConnector:
     async def async_get_version(self) -> dict:
         """Get version information"""
         return Version(await self.api.async_request("version"))
+
+    async def async_get_wifi_status(self) -> dict:
+        """Get wifi status information"""
+        return WifiStatus(await self.api.async_request("wifi_status"))
 
     async def __aenter__(self):
         return self
