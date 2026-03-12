@@ -21,3 +21,13 @@ class Version:
     def serial_number(self) -> str:
         """Serial Number"""
         return self.raw_data["serial_number"]
+
+    @property
+    def git_branch(self) -> str:
+        """Git branch in the installed firmware build."""
+        return self.raw_data["git_branch"]
+
+    @property
+    def web_service(self) -> str:
+        """Configured Tesla backend web service endpoint."""
+        return self.raw_data["web_service"]
