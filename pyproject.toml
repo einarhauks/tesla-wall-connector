@@ -1,31 +1,54 @@
-[tool.poetry]
+[project]
 name = "tesla-wall-connector"
 version = "1.1.0"
-license = "MIT"
 description = "API Library for communicating with a Tesla Wall Connector"
-authors = ["Einar Bragi Hauksson <einar.hauksson@gmail.com>"]
 readme = "README.md"
-repository = "https://github.com/einarhauks/tesla-wall-connector"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Einar Bragi Hauksson", email = "einar.hauksson@gmail.com" }]
 keywords = ["tesla", "wall connector"]
+dependencies = [
+  "aiohttp>=3.14,<4",
+  "async-timeout>=4.0.3,<5",
+  "backoff>=1.11,<2",
+]
 
-[tool.poetry.dependencies]
-python = "^3.8"
-aiohttp = "^3.9.0"
-backoff = ">=1.11.1"
+[project.urls]
+Repository = "https://github.com/einarhauks/tesla-wall-connector"
 
-[tool.poetry.group.dev.dependencies]
-pytest = "^6.2.5"
-aresponses = "^2.1.4"
-pytest-asyncio = ">0.15.1"
-black = ">=22.3"
-pre-commit = "^2.15.0"
-bandit = "^1.7.0"
-codespell = "^2.1.0"
-flake8 = "^4.0.1"
-pyupgrade = "^2.29.0"
-pylint = "^2.11.1"
-async-timeout = ">=4.0.3"
+[dependency-groups]
+dev = [
+  "pytest>=9.1,<10",
+  "aresponses>=3.0.0,<4",
+  "pytest-asyncio>=1.4,<2",
+  "pyright>=1.1,<2",
+  "pre-commit>=4.0,<5",
+  "bandit>=1.7,<2",
+  "codespell>=2.1,<3",
+  "ruff>=0.15,<1",
+]
 
 [build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+requires = ["uv_build>=0.11.6,<0.12"]
+build-backend = "uv_build"
+
+[tool.uv]
+default-groups = ["dev"]
+
+[tool.uv.build-backend]
+module-root = ""
+
+[tool.ruff]
+target-version = "py311"
+line-length = 120
+extend-exclude = [".venv"]
+
+[tool.ruff.lint]
+select = ["E", "F", "UP"]
+
+[tool.pyright]
+pythonVersion = "3.11"
+typeCheckingMode = "basic"
+include = ["tesla_wall_connector", "tests", "examples"]
+exclude = [".venv"]
+reportMissingTypeStubs = false
