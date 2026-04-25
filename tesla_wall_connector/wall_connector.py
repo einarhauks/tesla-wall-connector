@@ -15,14 +15,12 @@ class WallConnector:
     def __init__(
         self,
         host: str,
-        timeout: float = 1,
+        timeout: float = 5,
         session: ClientSession | None = None,
         split_phase: bool = False,
     ):
-        if session is None:
-            session = ClientSession()
-            self._session = session
-        self.api = API(host, session, timeout)
+        self._session = ClientSession() if session is None else session
+        self.api = API(host, self._session, timeout)
         self.split_phase = split_phase
 
     async def async_get_vitals(self) -> Vitals:

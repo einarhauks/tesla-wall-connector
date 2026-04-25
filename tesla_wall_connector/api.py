@@ -6,7 +6,6 @@ import socket
 from json.decoder import JSONDecodeError
 
 import aiohttp
-import asyncio
 
 from .exceptions import (
     WallConnectorConnectionError,
@@ -18,7 +17,9 @@ from .exceptions import (
 class API:
     """This class provides an abstraction for reading data from a Tesla Wall Connector"""
 
-    def __init__(self, host: str, session: aiohttp.ClientSession, timeout: float = 2):
+    READ_TIMEOUT_MULTIPLIER = 3
+
+    def __init__(self, host: str, session: aiohttp.ClientSession, timeout: float):
         self.host = host
         self.session = session
         self.timeout = timeout
@@ -30,6 +31,13 @@ class API:
 
     async def async_request(self, endpoint: str) -> dict:
         """Make an asynchronous request to a Tesla Wall Connector endpoint
+
+        The wall connector can take several seconds to start sending a
+        response even after the TCP session is established. Treat the
+        user-provided timeout as the connect budget and give reads more
+        headroom so slow-but-progressing responses are not cancelled
+        early.
+
         Args:
             endpoint: Endpoint string such as 'vitals' or 'lifetime'
 
@@ -41,14 +49,29 @@ class API:
             Data for the given endpoint
         """
         try:
-            async with asyncio.timeout(self.timeout):
-                async with self.session.get(self.get_url(endpoint)) as response:
-                    response.raise_for_status()
-                    return await self.decode_response(response)
+            request_timeout = aiohttp.ClientTimeout(
+                total=None,
+                connect=self.timeout,
+                sock_connect=self.timeout,
+                sock_read=self.timeout * self.READ_TIMEOUT_MULTIPLIER,
+            )
+            async with self.session.get(self.get_url(endpoint), timeout=request_timeout) as response:
+                response.raise_for_status()
+                return await self.decode_response(response)
+        except aiohttp.ConnectionTimeoutError as ex:
+            raise WallConnectorConnectionTimeoutError(
+                f"Connection timeout while opening socket to Wall Connector at {self.host}"
+            ) from ex
+        except aiohttp.SocketTimeoutError as ex:
+            raise WallConnectorConnectionTimeoutError(
+                f"Read timeout while waiting for response from Wall Connector at {self.host}"
+            ) from ex
         except TimeoutError as ex:
             raise WallConnectorConnectionTimeoutError(
-                f"Timeout while connecting to Wall Connector at {self.host}"
+                f"Timeout while communicating with Wall Connector at {self.host}"
             ) from ex
+        except aiohttp.ClientConnectorError as ex:
+            raise WallConnectorConnectionError(f"TCP connection to Wall Connector at {self.host} failed: {ex}") from ex
         except (aiohttp.ClientError, socket.gaierror) as ex:
             raise WallConnectorConnectionError(
                 f"Error while communicating with Wall Connector at {self.host}: {ex}"

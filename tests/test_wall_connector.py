@@ -238,7 +238,7 @@ async def test_internal_session(aresponses):
 @pytest.mark.asyncio
 async def test_timeout(aresponses):
     async def response_handler(_):
-        await asyncio.sleep(0.2)
+        await asyncio.sleep(0.4)
         return get_valid_vitals_response_handler(aresponses)
 
     aresponses.add("anyhost", "/api/1/vitals", "GET", response_handler)
@@ -247,6 +247,20 @@ async def test_timeout(aresponses):
         wall_connector = WallConnector("anyhost", timeout=0.1, session=session)
         with pytest.raises(WallConnectorConnectionTimeoutError):
             assert await wall_connector.async_get_vitals()
+
+
+@pytest.mark.asyncio
+async def test_slow_response_within_extended_read_timeout(aresponses):
+    async def response_handler(_):
+        await asyncio.sleep(0.2)
+        return get_valid_vitals_response_handler(aresponses)
+
+    aresponses.add("anyhost", "/api/1/vitals", "GET", response_handler)
+
+    async with aiohttp.ClientSession() as session:
+        wall_connector = WallConnector("anyhost", timeout=0.1, session=session)
+        vitals = await wall_connector.async_get_vitals()
+        assert vitals.contactor_closed is False
 
 
 @pytest.mark.asyncio
