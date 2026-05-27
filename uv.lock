@@ -169,15 +169,6 @@ wheels = [
 ]
 
 [[package]]
-name = "backoff"
-version = "1.11.1"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/27/d2/9d2d0f0d6bbe17628b031040b1dadaee616286267e660ad5286a5ed657da/backoff-1.11.1.tar.gz", hash = "sha256:ccb962a2378418c667b3c979b504fdeb7d9e0d29c0579e3b13b86467177728cb", size = 14883, upload-time = "2021-07-14T13:56:15.748Z" }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/d7/dd/88df7d5b2077825d6757a674123062c6e7545cc61556b42739e8757b7b65/backoff-1.11.1-py2.py3-none-any.whl", hash = "sha256:61928f8fa48d52e4faa81875eecf308eccfb1016b018bb6bd21e05b5d90a96c5", size = 13141, upload-time = "2021-07-14T13:56:13.096Z" },
-]
-
-[[package]]
 name = "bandit"
 version = "1.9.4"
 source = { registry = "https://pypi.org/simple" }
@@ -842,7 +833,6 @@ version = "1.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "aiohttp" },
-    { name = "backoff" },
 ]
 
 [package.dev-dependencies]
@@ -858,10 +848,7 @@ dev = [
 ]
 
 [package.metadata]
-requires-dist = [
-    { name = "aiohttp", specifier = ">=3.14,<4" },
-    { name = "backoff", specifier = ">=1.11,<2" },
-]
+requires-dist = [{ name = "aiohttp", specifier = ">=3.14,<4" }]
 
 [package.metadata.requires-dev]
 dev = [

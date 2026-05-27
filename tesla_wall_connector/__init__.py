@@ -1,5 +1,5 @@
 """Asynchronous Python client for Tesla Wall Connector"""
 
-from .wall_connector import WallConnector  # noqa
+from .wall_connector import WallConnector
 
-VERSION = "0.1.0"
+__all__ = ["WallConnector"]
