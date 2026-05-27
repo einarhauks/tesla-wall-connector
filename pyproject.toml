@@ -8,8 +8,7 @@ license = { text = "MIT" }
 authors = [{ name = "Einar Bragi Hauksson", email = "einar.hauksson@gmail.com" }]
 keywords = ["tesla", "wall connector"]
 dependencies = [
-  "aiohttp>=3.14,<4",
-  "backoff>=1.11,<2",
+  "aiohttp>=3.14,<4"
 ]
 
 [project.urls]

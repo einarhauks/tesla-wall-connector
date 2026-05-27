@@ -241,9 +241,6 @@ async def test_timeout(aresponses):
         await asyncio.sleep(0.2)
         return get_valid_vitals_response_handler(aresponses)
 
-    # Backoff will try 3 times
-    aresponses.add("anyhost", "/api/1/vitals", "GET", response_handler)
-    aresponses.add("anyhost", "/api/1/vitals", "GET", response_handler)
     aresponses.add("anyhost", "/api/1/vitals", "GET", response_handler)
 
     async with aiohttp.ClientSession() as session:

@@ -7,7 +7,6 @@ from json.decoder import JSONDecodeError
 
 import aiohttp
 import asyncio
-import backoff
 
 from .exceptions import (
     WallConnectorConnectionError,
@@ -29,11 +28,6 @@ class API:
         """Construct a Wall Charger URL for a specified endpoint"""
         return f"http://{self.host}/api/1/{endpoint}"
 
-    @backoff.on_exception(
-        backoff.expo,
-        (WallConnectorConnectionTimeoutError, WallConnectorConnectionError),
-        max_tries=3,
-    )
     async def async_request(self, endpoint: str) -> dict:
         """Make an asynchronous request to a Tesla Wall Connector endpoint
         Args:
