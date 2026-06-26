@@ -54,10 +54,6 @@ async def main():
         print(f"config_status: {vitals.config_status}")
         print(f"evse_state: {vitals.evse_state}")
         print(f"current_alerts: {vitals.current_alerts}")
-
-        await asyncio.sleep(2)
-
-        await vitals.async_update()
         print(f"uptime_s: {vitals.uptime_s}s")
 
         print("---- Lifetime ----")
@@ -73,10 +69,6 @@ async def main():
         print(f"connector_cycles: {lifetime.connector_cycles}")
         print(f"uptime_s: {lifetime.uptime_s}s")
         print(f"charging_time_s: {lifetime.charging_time_s}s")
-
-        await asyncio.sleep(2)
-
-        await lifetime.async_update()
         print(f"uptime_s: {lifetime.uptime_s}s")
 
 
