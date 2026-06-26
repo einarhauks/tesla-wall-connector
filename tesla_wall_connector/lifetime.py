@@ -1,4 +1,4 @@
-""" Lifetime Data class for Tesla Wall Connector """
+"""Lifetime Data class for Tesla Wall Connector"""
 
 
 class Lifetime:

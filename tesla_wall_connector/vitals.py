@@ -2,8 +2,7 @@
 #   in order to use the attribute names as they appear in the Tesla API
 # pylint: disable=too-many-public-methods
 #   this object has a lot of attributes in the Tesla API, therefore we need many public methods
-""" Vitals Data class for Tesla Wall Connector """
-import typing
+"""Vitals Data class for Tesla Wall Connector"""
 
 
 class Vitals:
@@ -156,12 +155,12 @@ class Vitals:
         return self.raw_data["evse_state"]
 
     @property
-    def current_alerts(self) -> typing.List[str]:
+    def current_alerts(self) -> list[str]:
         """Current alerts"""
         return self.raw_data["current_alerts"]
 
     @property
-    def evse_not_ready_reasons(self) -> typing.List[int]:
+    def evse_not_ready_reasons(self) -> list[int]:
         """Reasons for EVSE not being ready."""
         return self.raw_data.get("evse_not_ready_reasons", [])
 
@@ -172,8 +171,8 @@ class Vitals:
             return round(self.grid_v * self.vehicle_current_a, 1)
 
         total_power = (
-            (self.voltageA_v * self.currentA_a) +
-            (self.voltageB_v * self.currentB_a) +
-            (self.voltageC_v * self.currentC_a)
+            (self.voltageA_v * self.currentA_a)
+            + (self.voltageB_v * self.currentB_a)
+            + (self.voltageC_v * self.currentC_a)
         )
         return round(total_power, 1)

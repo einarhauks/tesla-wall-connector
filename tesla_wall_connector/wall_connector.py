@@ -1,4 +1,4 @@
-""" Asynchronous Python client for Tesla Wall Connector """
+"""Asynchronous Python client for Tesla Wall Connector"""
 
 from aiohttp import ClientSession
 

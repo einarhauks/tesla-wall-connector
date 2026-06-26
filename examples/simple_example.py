@@ -1,4 +1,4 @@
-""" Simple example showing usage of this library """
+"""Simple example showing usage of this library"""
 # pylint: disable=missing-function-docstring
 
 import asyncio
