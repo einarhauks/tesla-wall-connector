@@ -16,7 +16,7 @@ class WallConnector:
         self,
         host: str,
         timeout: float = 1,
-        session: ClientSession = None,
+        session: ClientSession | None = None,
         split_phase: bool = False,
     ):
         if session is None:
@@ -25,22 +25,22 @@ class WallConnector:
         self.api = API(host, session, timeout)
         self.split_phase = split_phase
 
-    async def async_get_vitals(self) -> dict:
+    async def async_get_vitals(self) -> Vitals:
         """Get 'vitals' data"""
         return Vitals(
             await self.api.async_request("vitals"),
             split_phase=self.split_phase,
         )
 
-    async def async_get_lifetime(self) -> dict:
+    async def async_get_lifetime(self) -> Lifetime:
         """Get 'lifetime' data"""
         return Lifetime(await self.api.async_request("lifetime"))
 
-    async def async_get_version(self) -> dict:
+    async def async_get_version(self) -> Version:
         """Get version information"""
         return Version(await self.api.async_request("version"))
 
-    async def async_get_wifi_status(self) -> dict:
+    async def async_get_wifi_status(self) -> WifiStatus:
         """Get wifi status information"""
         return WifiStatus(await self.api.async_request("wifi_status"))
 
