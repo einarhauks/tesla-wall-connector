@@ -1,4 +1,4 @@
-""" Example showing usage of this library """
+"""Example showing usage of this library"""
 # pylint: disable=missing-function-docstring
 
 import os

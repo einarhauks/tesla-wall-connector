@@ -1,4 +1,4 @@
-""" Version Data class for Tesla Wall Connector """
+"""Version Data class for Tesla Wall Connector"""
 
 
 class Version:

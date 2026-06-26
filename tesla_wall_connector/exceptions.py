@@ -1,4 +1,4 @@
-""" Tesla Wall Connector Exceptions """
+"""Tesla Wall Connector Exceptions"""
 
 
 class WallConnectorError(Exception):

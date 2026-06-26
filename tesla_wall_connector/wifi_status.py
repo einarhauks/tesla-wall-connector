@@ -1,4 +1,5 @@
 """Wifi status data class for Tesla Wall Connector."""
+
 import base64
 import binascii
 

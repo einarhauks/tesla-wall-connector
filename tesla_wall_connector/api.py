@@ -1,6 +1,5 @@
-""" Tesla Wall Connector API class """
+"""Tesla Wall Connector API class"""
 
-import asyncio
 import json
 import re
 import socket
@@ -52,7 +51,7 @@ class API:
                 async with self.session.get(self.get_url(endpoint)) as response:
                     response.raise_for_status()
                     return await self.decode_response(response)
-        except asyncio.TimeoutError as ex:
+        except TimeoutError as ex:
             raise WallConnectorConnectionTimeoutError(
                 f"Timeout while connecting to Wall Connector at {self.host}"
             ) from ex
@@ -79,12 +78,7 @@ class API:
                     return json.loads(raw_body)
                 except JSONDecodeError as ex_:
                     raise WallConnectorDecodeError(
-                        (
-                            "Error decoding response from wall connector after"
-                            " adding closing object character"
-                        ),
+                        ("Error decoding response from wall connector after adding closing object character"),
                         raw_body,
                     ) from ex_
-            raise WallConnectorDecodeError(
-                "Error decoding response from wall connector", raw_body
-            ) from ex
+            raise WallConnectorDecodeError("Error decoding response from wall connector", raw_body) from ex

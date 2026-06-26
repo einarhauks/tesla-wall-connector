@@ -1,5 +1,6 @@
 # pylint: disable=missing-function-docstring
-""" Tests for Tesla Wall Connector API """
+"""Tests for Tesla Wall Connector API"""
+
 import asyncio
 import aiohttp
 import pytest
@@ -76,6 +77,7 @@ async def test_vitals_request_modern_relay_fields(aresponses):
         # Backward-compatible alias maps to relay_k1_v when relay_coil_v is absent.
         assert vitals.relay_coil_v == 12.0
         assert vitals.evse_not_ready_reasons == [4, 8]
+
 
 @pytest.mark.asyncio
 async def test_vitals_request_split_phase(aresponses):
@@ -256,9 +258,7 @@ async def test_error_response(aresponses):
         "anyhost",
         "/api/1/vitals",
         "GET",
-        aresponses.Response(
-            status=500, headers={"Content-Type": "text/plain"}, text="Error"
-        ),
+        aresponses.Response(status=500, headers={"Content-Type": "text/plain"}, text="Error"),
     )
 
     async with aiohttp.ClientSession() as session:
@@ -305,9 +305,7 @@ def get_valid_vitals_response_handler(aresponses):
 
 
 def add_valid_vitals_response(aresponses):
-    aresponses.add(
-        "anyhost", "/api/1/vitals", "GET", get_valid_vitals_response_handler(aresponses)
-    )
+    aresponses.add("anyhost", "/api/1/vitals", "GET", get_valid_vitals_response_handler(aresponses))
 
 
 @pytest.mark.asyncio
